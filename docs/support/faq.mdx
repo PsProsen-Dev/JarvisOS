@@ -1,0 +1,158 @@
+---
+title: "FAQ"
+description: "Common questions about JarvisOS."
+icon: "circle-question"
+---
+
+# Frequently Asked Questions
+
+---
+
+## Installation
+
+<AccordionGroup>
+
+<Accordion title="Which Windows 11 builds are supported?">
+JarvisOS v30.05.26 supports the following Windows 11 builds:
+
+- 22000 (21H2)
+- 22621 (22H2)
+- 22631 (23H2)
+- 26100 (24H2)
+- 26200
+- 27686
+
+Always start from a **clean, unmodified Windows install**. Do not apply JarvisOS on top of an existing tweaked system.
+</Accordion>
+
+<Accordion title="Can I apply JarvisOS on top of an existing Windows install?">
+Technically yes — AME Wizard can run on an existing install. But it is strongly recommended to start from a fresh Windows installation for a predictable, clean result.
+
+Any third-party tweaks, debloat scripts, or registry modifications already present will conflict with AME's configuration and may cause instability.
+</Accordion>
+
+<Accordion title="The AME Wizard shows a popup modal, not a full-screen UI. What's wrong?">
+This means you may have an older version of the playbook. Download the latest `JarvisOS_30.05.26.apbx` from [GitHub Releases](https://github.com/PsProsen-Dev/JarvisOS/releases/latest).
+
+The current build uses Privacy+ style DependsOn linking which forces the full-screen selection flow in AME Wizard.
+</Accordion>
+
+<Accordion title="The system froze or restarted unexpectedly during install. What do I do?">
+If the system force-shut down during the mitigation phase, your Windows install may be in an inconsistent state. The safest path is a clean reinstall.
+
+Do not attempt to resume or repair the AME process mid-run.
+</Accordion>
+
+</AccordionGroup>
+
+---
+
+## Apps & Software
+
+<AccordionGroup>
+
+<Accordion title="Where is the Microsoft Store?">
+Removed. The Microsoft Store and its background Appx infrastructure are a significant telemetry vector — so it is purged during installation.
+
+Use **App Fetch** to sideload any UWP app you need:
+
+```powershell
+app-fetch install <URL_or_local_path>
+```
+
+For most software, **WinGet** is the better option and is fully preserved in JarvisOS:
+
+```powershell
+winget install <PackageName>
+```
+</Accordion>
+
+<Accordion title="Where is Microsoft Edge?">
+Removed. Your selected browser (Brave, LibreWolf, or Zen Browser) is installed instead during the playbook run.
+
+Edge cannot be easily reinstalled on a JarvisOS system and is not supported.
+</Accordion>
+
+<Accordion title="Where is OneDrive / Teams / Xbox?">
+All removed. OneDrive, Microsoft Teams, Xbox, Game Bar, Cortana, and all consumer Microsoft apps are uninstalled during the playbook run. They will not be reinstalled by Windows Update in this configuration.
+</Accordion>
+
+<Accordion title="Can I use WSL2, Docker, and Hyper-V?">
+Yes — all three are explicitly preserved in JarvisOS. They are protected from the service and component removal passes.
+
+Verify WSL2 is active after install:
+```powershell
+wsl --list --verbose
+```
+
+If no distribution is installed yet:
+```powershell
+wsl --install -d Ubuntu
+```
+</Accordion>
+
+</AccordionGroup>
+
+---
+
+## Updates & Security
+
+<AccordionGroup>
+
+<Accordion title="How do I get security updates?">
+Use the **AtlasOS Toolbox** (on your desktop):
+
+1. Open AtlasOS Toolbox → Windows Update → **Enable**
+2. Run Windows Update and install security patches
+3. Windows Update → **Disable** when done
+
+Do not use the Windows Settings app to manage updates — it will not respect JarvisOS's configuration.
+</Accordion>
+
+<Accordion title="Will Windows Update reinstall removed components?">
+If Windows Update is left enabled long-term, yes — Microsoft may push updates that attempt to restore Edge, OneDrive, or telemetry services.
+
+This is why JarvisOS suppresses automatic updates. Patch on your schedule, then disable.
+</Accordion>
+
+<Accordion title="Is Windows Defender active?">
+Yes, by default. JarvisOS leaves Defender enabled — removing it requires trusting your entire software supply chain.
+
+If you want to disable it:
+```powershell
+ame-settings-cli set defender --state off
+```
+
+The playbook also includes an optional Defender removal checkbox during install (unchecked by default).
+</Accordion>
+
+</AccordionGroup>
+
+---
+
+## Developer Tools
+
+<AccordionGroup>
+
+<Accordion title="Git / VS Code / Node.js are not installed. Why?">
+These are optional checkboxes during install — all checked by default, but if you unchecked them, they were not installed.
+
+You can install them manually via WinGet:
+
+```powershell
+winget install Git.Git
+winget install Microsoft.VisualStudioCode
+winget install OpenJS.NodeJS.LTS
+```
+</Accordion>
+
+<Accordion title="Can I use Docker Desktop?">
+Yes. Hyper-V and WSL2 are both preserved, so Docker Desktop works normally.
+
+Install via WinGet:
+```powershell
+winget install Docker.DockerDesktop
+```
+</Accordion>
+
+</AccordionGroup>

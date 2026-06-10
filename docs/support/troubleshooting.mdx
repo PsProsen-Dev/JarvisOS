@@ -1,0 +1,171 @@
+---
+title: "Troubleshooting"
+description: "Diagnosing and resolving common issues after a JarvisOS deployment."
+icon: "wrench"
+---
+
+# Troubleshooting Guide
+
+---
+
+## Installation Issues
+
+<AccordionGroup>
+
+<Accordion title="AME Wizard fails at a specific task with an error">
+**Most common causes:**
+
+1. **Defender / Tamper Protection still on** — disable both in Windows Security before running
+2. **Third-party antivirus running** — disable or uninstall it completely before the playbook run
+3. **Windows Updates not fully applied** — install all pending updates and reboot before running AME
+
+If a specific task errors and you can read the task name in the log, report it on [GitHub Issues](https://github.com/PsProsen-Dev/JarvisOS/issues) with the full error message.
+</Accordion>
+
+<Accordion title="Registry FormatException errors in the log">
+This occurs if registry values are in an unexpected format. JarvisOS v30.05.26 normalizes all REG_DWORD values to decimal format to prevent this.
+
+If you see this error, ensure you are using the latest release: `JarvisOS_30.05.26.apbx`.
+</Accordion>
+
+<Accordion title="w32tm / time sync not working after install">
+The Windows Time service (`w32tm`) requires an explicit start after some configurations. Run:
+
+```powershell
+net start w32tm
+w32tm /resync /force
+```
+
+This was fixed in v30.05.26 with an explicit service start action in the build.
+</Accordion>
+
+<Accordion title="svchost.exe errors immediately after playbook completes">
+These are transient memory violations that occur during the first boot after mass service deletion — SvcHost is merging process groups mid-restart.
+
+**Fix:** Simply restart the machine. The errors are self-resolving and do not indicate a corrupted install.
+</Accordion>
+
+</AccordionGroup>
+
+---
+
+## Browser Issues
+
+<AccordionGroup>
+
+<Accordion title="Zen Browser install failed">
+Zen Browser uses a GitHub release as its download source. If the installer fails, download it manually from the [Zen Browser GitHub releases page](https://github.com/zen-browser/desktop/releases/latest) and run `zen.installer.exe` directly.
+</Accordion>
+
+<Accordion title="Browser not set as default">
+After install, Windows may still reference Edge (even though it is removed). Set your default browser:
+
+```
+Settings → Apps → Default Apps → search for your browser → set all relevant file types
+```
+
+Or right-click any `.html` file → Open with → Choose another app → your browser → set as default.
+</Accordion>
+
+</AccordionGroup>
+
+---
+
+## Developer Tool Issues
+
+<AccordionGroup>
+
+<Accordion title="WSL2 not working / can't install a distro">
+Verify Hyper-V and Virtual Machine Platform are enabled:
+
+```powershell
+# Check features
+Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -match "Hyper-V|VirtualMachinePlatform" }
+
+# Enable if needed
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+```
+
+Reboot after enabling. Then:
+```powershell
+wsl --set-default-version 2
+wsl --install -d Ubuntu
+```
+</Accordion>
+
+<Accordion title="WinGet is not found / not working">
+WinGet is preserved by JarvisOS. If it is not found in PATH:
+
+```powershell
+# Check if it is installed
+Get-Command winget -ErrorAction SilentlyContinue
+
+# If missing, install via App Fetch
+app-fetch deploy --target winget
+```
+</Accordion>
+
+<Accordion title="VS Code extensions not installing (marketplace errors)">
+VS Code's extension marketplace requires internet access. Verify your network connection and DNS resolution:
+
+```powershell
+nslookup marketplace.visualstudio.com
+```
+
+If DNS fails, the network stack may not be fully initialized. Restart and try again, or manually configure your preferred DNS (1.1.1.1 or 9.9.9.9) in Network Settings.
+</Accordion>
+
+</AccordionGroup>
+
+---
+
+## System Tools Issues
+
+<AccordionGroup>
+
+<Accordion title="AtlasOS Toolbox won't launch">
+Ensure the AtlasDesktop files are in place:
+
+```powershell
+Test-Path "C:\Windows\AtlasDesktop"
+Test-Path "C:\Windows\AtlasModules"
+```
+
+If these paths don't exist, the maintenance tools were not installed. Re-run the `INSTALL_MAINTENANCE_TOOLS.bat` from `C:\Program Files\JarvisOS Tools\`.
+</Accordion>
+
+<Accordion title="Printer not working">
+The Print Spooler is disabled by default. Enable it:
+
+```powershell
+ame-settings-cli set spooler --state on
+```
+
+Or via Services (`services.msc`): find **Print Spooler** → Start → set Startup Type to Manual.
+
+Disable again when done printing:
+```powershell
+ame-settings-cli set spooler --state off
+```
+</Accordion>
+
+<Accordion title="Windows Time / Clock is wrong">
+```powershell
+net start w32tm
+w32tm /config /manualpeerlist:"pool.ntp.org" /syncfromflags:manual /reliable:YES /update
+w32tm /resync /force
+```
+</Accordion>
+
+</AccordionGroup>
+
+---
+
+## Still Stuck?
+
+Open a [GitHub Issue](https://github.com/PsProsen-Dev/JarvisOS/issues) with:
+- Your Windows 11 build number (`winver`)
+- JarvisOS version (e.g., `30.05.26`)
+- The full error message or log from AME Wizard
+- What you were doing when the issue occurred

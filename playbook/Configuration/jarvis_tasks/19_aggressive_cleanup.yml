@@ -1,0 +1,36 @@
+---
+title: JarvisOS Aggressive Cleanup
+description: Forcefully removes stubborn inbox packages.
+privilege: Admin
+actions:
+  # Unconditional removals
+  - !powerShell:
+      command: |
+        $apps = @("*WindowsBackup*", "*Getstarted*")
+        foreach ($app in $apps) {
+            Get-AppxPackage -AllUsers $app | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
+            Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $app | Remove-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue
+        }
+      weight: 5
+      wait: true
+
+  # Conditional: Remove Xbox
+  - !powerShell:
+      command: |
+        $apps = @("*Xbox*", "*GamingApp*")
+        foreach ($app in $apps) {
+            Get-AppxPackage -AllUsers $app | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
+            Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $app | Remove-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue
+        }
+      option: 'remove-xbox'
+      weight: 5
+      wait: true
+
+  # Conditional: Remove Defender UI
+  - !powerShell:
+      command: |
+        Get-AppxPackage -AllUsers "*SecHealthUI*" | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
+        Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like "*SecHealthUI*" | Remove-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue
+      option: 'defender-disable'
+      weight: 5
+      wait: true

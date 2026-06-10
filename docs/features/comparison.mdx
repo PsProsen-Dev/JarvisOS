@@ -1,0 +1,67 @@
+---
+title: 'Playbook Comparison'
+description: 'How JarvisOS stacks up against AtlasOS, ReviOS, Privacy+, and AME 11.'
+---
+
+# Playbook Comparison
+
+Not all custom Windows environments are built the same. Gaming builds sacrifice privacy for frame rates. Privacy builds break developer tooling. JarvisOS is engineered for a specific audience — developers — and makes no compromises in either direction.
+
+---
+
+## Feature Matrix
+
+| Feature | JarvisOS⚡ | AtlasOS | ReviOS | AME 11 |
+|---------|:----------:|:-------:|:------:|:------:|
+| **Telemetry removal depth** | Registry + Service + Appx | Policy-level | Policy-level | Total eradication |
+| **WSL2 / Hyper-V** | ✅ Preserved | ✅ Preserved | ✅ Preserved | ⚠️ Manual |
+| **Windows Sandbox** | ✅ Preserved | ❌ Removed | ⚠️ Optional | ❌ Removed |
+| **Docker compatibility** | ✅ Yes | ✅ Yes | ✅ Yes | ⚠️ Manual |
+| **Windows Update** | Manual (AtlasOS Toolbox) | Managed | Enabled (tweaked) | Permanently broken |
+| **Microsoft Store** | ❌ Removed | ✅ Optional | ✅ Available | ❌ Removed |
+| **Xbox / Game Bar** | ❌ Completely removed | ✅ Fully supported | ✅ Supported | ❌ Removed |
+| **Post-install toolbox** | ✅ Privacy+ Settings + AtlasOS Toolbox | ✅ AtlasOS Toolbox | ✅ Revision Tool | ❌ None |
+| **Browser choice (at install)** | Brave / LibreWolf / Zen Browser | Manual | Manual | Manual |
+| **Office suite (at install)** | OnlyOffice / LibreOffice / FreeOffice | Manual | Manual | Manual |
+| **Target audience** | Full-stack developers | Gamers | General power users | Extreme privacy advocates |
+
+---
+
+## Why Not AtlasOS?
+
+AtlasOS is excellent — for gaming. It prioritizes frame rates and keeps Xbox and Game Pass intact. That means telemetry services tied to the gaming ecosystem stay alive.
+
+JarvisOS removes everything Xbox-related — Xbox Identity Provider, Game Save sync, Game Bar, Xbox Networking — because developers don't need them, and they consume background resources.
+
+If you are a competitive gamer who needs Vanguard or Xbox Live: **use AtlasOS instead**. JarvisOS is the wrong tool for that.
+
+---
+
+## Why Not ReviOS?
+
+ReviOS is a stable, well-maintained daily driver — but it keeps Windows Update enabled (tweaked) and takes a conservative approach to service removal. It is not built around a developer's specific needs.
+
+JarvisOS borrows ReviOS's stability mindset and includes the **Revision Tool** as a post-install maintenance option, but goes deeper on privacy and preserves more developer-specific features.
+
+---
+
+## Why Not Pure AME 11?
+
+AME 11 is the most aggressive privacy environment available — but it permanently breaks Windows Update, meaning you cannot get critical driver patches or security fixes without significant manual work.
+
+JarvisOS uses the AME playbook system but integrates the **AtlasOS Toolbox** to manage selective update sessions — security patches when you need them, locked down when you don't.
+
+---
+
+## Where JarvisOS Draws From
+
+| Source | What We Took |
+|--------|-------------|
+| **Privacy+** | Privacy hardening foundation, `ame-settings-cli` tool |
+| **ReviOS** | Service decision philosophy, Revision Tool integration |
+| **AtlasOS** | Dev-safe performance tweaks, AtlasOS Toolbox, update management approach |
+| **AME Beta** | The playbook engine and action system that makes all of this possible |
+
+<Info>
+JarvisOS is not a fork of any of these projects. It is an original AME playbook that studied, analyzed, and selectively adopted patterns from each — with a developer-first lens applied to every decision.
+</Info>

@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Documentation
+    url: https://jarvisos.mintlify.app
+    about: Read the full JarvisOS docs before opening an issue.
+  - name: 💬 Community Discussions
+    url: https://github.com/PsProsen-Dev/JarvisOS/discussions
+    about: Ask questions, share your setup, or discuss ideas here.
+  - name: 🔒 Report a Security Vulnerability
+    url: https://github.com/PsProsen-Dev/JarvisOS/security/advisories/new
+    about: Do NOT open a public issue for security vulnerabilities. Report privately here.

@@ -1,0 +1,164 @@
+---
+title: OS Profile & Cleanup
+description: Applies 5-Mode OS Profile (Gaming/Developer/Creator/General/Privacy) and removes bloatware natively.
+privilege: Admin
+actions:
+  # ════════════════════════════════════════════════════════════════
+  # SECTION 1: UNCONDITIONAL DELETIONS (All Modes)
+  # ════════════════════════════════════════════════════════════════
+  - !appx: {name: '*Getstarted*', type: family, weight: 2}
+  - !appx: {name: '*WindowsBackup*', type: family, weight: 2}
+
+  # DELETE Mail Clients natively (unconditional — web mail is the standard now)
+  - !appx: {name: '*OutlookForWindows*', type: family, weight: 2}
+  - !appx: {name: '*windowscommunicationsapps*', type: family, weight: 2}
+
+  # DELETE Windows Media Player Legacy natively via DISM
+  - !cmd:
+      command: 'dism.exe /online /Disable-Feature /FeatureName:WindowsMediaPlayer /Remove /NoRestart /Quiet'
+      wait: true
+      weight: 15
+
+  # ════════════════════════════════════════════════════════════════
+  # SECTION 2: SETTINGS PAGE VISIBILITY (Per-Mode)
+  # ════════════════════════════════════════════════════════════════
+  - !registryKey:
+      path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer'
+      operation: add
+
+  # 🎮 GAMING: Show Gaming settings, hide broken features
+  - !registryValue:
+      path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer'
+      value: 'SettingsPageVisibility'
+      type: REG_SZ
+      data: 'hide:recovery;maps;maps-downloadmaps;privacy-speechtyping;privacy-speech;privacy-feedback;privacy-activityhistory;search-permissions;privacy-general;sync;mobile-devices;mobile-devices-addphone;workplace;backup;cortana;windowsinsider;windowsinsider-optin;family-group'
+      operation: add
+      option: 'profile-gaming'
+
+  # 💻 DEVELOPER: Hide Gaming + broken features
+  - !registryValue:
+      path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer'
+      value: 'SettingsPageVisibility'
+      type: REG_SZ
+      data: 'hide:gaming;gaming-gamebar;gaming-gamedvr;gaming-broadcasting;gaming-gamemode;gaming-trueplay;gaming-xboxnetworking;recovery;maps;maps-downloadmaps;privacy-speechtyping;privacy-speech;privacy-feedback;privacy-activityhistory;search-permissions;privacy-general;sync;mobile-devices;mobile-devices-addphone;workplace;backup;cortana;windowsinsider;windowsinsider-optin;family-group'
+      operation: add
+      option: 'profile-dev'
+
+  # 🎬 CREATOR: Show Gaming (for Game Bar recording), hide broken features
+  - !registryValue:
+      path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer'
+      value: 'SettingsPageVisibility'
+      type: REG_SZ
+      data: 'hide:recovery;maps;maps-downloadmaps;privacy-speechtyping;privacy-speech;privacy-feedback;privacy-activityhistory;search-permissions;privacy-general;sync;mobile-devices;mobile-devices-addphone;workplace;backup;cortana;windowsinsider;windowsinsider-optin;family-group'
+      operation: add
+      option: 'profile-creator'
+
+
+  # 🔒 PRIVACY: Aggressively hide everything privacy-violating + broken features
+  - !registryValue:
+      path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer'
+      value: 'SettingsPageVisibility'
+      type: REG_SZ
+      data: 'hide:gaming;gaming-gamebar;gaming-gamedvr;gaming-broadcasting;gaming-gamemode;gaming-trueplay;gaming-xboxnetworking;recovery;maps;maps-downloadmaps;privacy-speechtyping;privacy-speech;privacy-feedback;privacy-activityhistory;search-permissions;privacy-general;sync;mobile-devices;mobile-devices-addphone;workplace;backup;cortana;windowsinsider;windowsinsider-optin;family-group;privacy-location;privacy-webcam;privacy-microphone;privacy-notifications;privacy-contacts;privacy-calendar;privacy-callhistory;privacy-email;privacy-messaging;privacy-radios;privacy-customdevices;privacy-backgroundapps;privacy-appdiagnostics;privacy-voiceactivation'
+      operation: add
+      option: 'profile-privacy'
+
+  # ════════════════════════════════════════════════════════════════
+  # SECTION 3: XBOX/GAMING APP + SERVICE PERMANENT DELETION
+  # (Dev & Privacy modes only)
+  # ════════════════════════════════════════════════════════════════
+  # UWP App removals
+  - !appx: {name: '*XboxGamingOverlay*', type: family, weight: 2, option: 'profile-dev'}
+  - !appx: {name: '*XboxGameOverlay*', type: family, weight: 2, option: 'profile-dev'}
+  - !appx: {name: '*XboxSpeechToTextOverlay*', type: family, weight: 2, option: 'profile-dev'}
+  - !appx: {name: '*XboxIdentityProvider*', type: family, weight: 2, option: 'profile-dev'}
+  - !appx: {name: '*GamingApp*', type: family, weight: 2, option: 'profile-dev'}
+
+  # Permanently DELETE Xbox services (not just disable) — Dev Profile
+  - !run: {exe: 'sc.exe', args: 'delete XblAuthManager', ignoreErrors: true, option: 'profile-dev'}
+  - !run: {exe: 'sc.exe', args: 'delete XblGameSave', ignoreErrors: true, option: 'profile-dev'}
+  - !run: {exe: 'sc.exe', args: 'delete XboxNetApiSvc', ignoreErrors: true, option: 'profile-dev'}
+  - !run: {exe: 'sc.exe', args: 'delete XboxGipSvc', ignoreErrors: true, option: 'profile-dev'}
+
+  # UWP App removals — Privacy Profile
+  - !appx: {name: '*XboxGamingOverlay*', type: family, weight: 2, option: 'profile-privacy'}
+  - !appx: {name: '*XboxGameOverlay*', type: family, weight: 2, option: 'profile-privacy'}
+  - !appx: {name: '*XboxSpeechToTextOverlay*', type: family, weight: 2, option: 'profile-privacy'}
+  - !appx: {name: '*XboxIdentityProvider*', type: family, weight: 2, option: 'profile-privacy'}
+  - !appx: {name: '*GamingApp*', type: family, weight: 2, option: 'profile-privacy'}
+
+  # Permanently DELETE Xbox services — Privacy Profile
+  - !run: {exe: 'sc.exe', args: 'delete XblAuthManager', ignoreErrors: true, option: 'profile-privacy'}
+  - !run: {exe: 'sc.exe', args: 'delete XblGameSave', ignoreErrors: true, option: 'profile-privacy'}
+  - !run: {exe: 'sc.exe', args: 'delete XboxNetApiSvc', ignoreErrors: true, option: 'profile-privacy'}
+  - !run: {exe: 'sc.exe', args: 'delete XboxGipSvc', ignoreErrors: true, option: 'profile-privacy'}
+
+  # ════════════════════════════════════════════════════════════════
+  # SECTION 4: NOVA NETWORK TWEAKS (All Modes — global benefit)
+  # ════════════════════════════════════════════════════════════════
+  - !run: {exe: 'netsh', args: 'int tcp set supplemental template=internet congestionprovider=bbr2'}
+  - !run: {exe: 'netsh', args: 'int tcp set supplemental template=datacenter congestionprovider=bbr2'}
+  - !run: {exe: 'netsh', args: 'int tcp set supplemental template=compat congestionprovider=bbr2'}
+  - !run: {exe: 'netsh', args: 'int ipv4 set global loopbacklargemtu=disabled'}
+  - !run: {exe: 'netsh', args: 'int ipv6 set global loopbacklargemtu=disabled'}
+  - !run: {exe: 'netsh', args: 'int tcp set global timestamps=disabled'}
+  - !run: {exe: 'netsh', args: 'int tcp set global fastopen=enabled'}
+  - !run: {exe: 'netsh', args: 'int tcp set global fastopenfallback=enabled'}
+  - !run: {exe: 'netsh', args: 'int ipv4 set dynamicport tcp start=1025 num=64511'}
+  - !run: {exe: 'netsh', args: 'int ipv4 set dynamicport udp start=1025 num=64511'}
+
+  # ════════════════════════════════════════════════════════════════
+  # SECTION 5: GAMING QoS (Gaming mode only)
+  # ════════════════════════════════════════════════════════════════
+  - !registryValue: {path: 'HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\QoS', value: 'Do not use NLA', type: REG_SZ, data: '1', option: 'profile-gaming'}
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games', value: 'Scheduling Category', type: REG_SZ, data: 'High', option: 'profile-gaming'}
+  - !registryValue: {path: 'HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers', value: 'HwSchMode', type: REG_DWORD, data: '2', option: 'profile-gaming'}
+  - !powerShell:
+      command: |
+        New-NetQosPolicy -Name "Valorant" -AppPathNameMatchCondition "VALORANT-Win64-Shipping.exe" -DSCPAction 46 -Precedence 127 -ErrorAction SilentlyContinue
+        New-NetQosPolicy -Name "CS2" -AppPathNameMatchCondition "cs2.exe" -DSCPAction 46 -Precedence 127 -ErrorAction SilentlyContinue
+        New-NetQosPolicy -Name "Apex" -AppPathNameMatchCondition "r5apex_dx12.exe" -DSCPAction 46 -Precedence 127 -ErrorAction SilentlyContinue
+        New-NetQosPolicy -Name "Fortnite" -AppPathNameMatchCondition "FortniteClient-Win64-Shipping.exe" -DSCPAction 46 -Precedence 127 -ErrorAction SilentlyContinue
+        New-NetQosPolicy -Name "Dota2" -AppPathNameMatchCondition "dota2.exe" -DSCPAction 46 -Precedence 127 -ErrorAction SilentlyContinue
+      option: 'profile-gaming'
+      wait: true
+
+  # ════════════════════════════════════════════════════════════════
+  # SECTION 6: CREATOR MMCSS (Creator mode — Pro Audio & Streaming priority)
+  # ════════════════════════════════════════════════════════════════
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio', value: 'Scheduling Category', type: REG_SZ, data: 'High', option: 'profile-creator'}
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio', value: 'Priority', type: REG_DWORD, data: '1', option: 'profile-creator'}
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile', value: 'SystemResponsiveness', type: REG_DWORD, data: '10', option: 'profile-creator'}
+  - !registryValue: {path: 'HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers', value: 'HwSchMode', type: REG_DWORD, data: '2', option: 'profile-creator'}
+
+  # ════════════════════════════════════════════════════════════════
+  # SECTION 7: PRIVACY MODE — Extra Hardening (Privacy mode only)
+  # ════════════════════════════════════════════════════════════════
+  # Block all cloud content and sync
+  - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent', value: 'DisableCloudOptimizedContent', type: REG_DWORD, data: '1', option: 'profile-privacy'}
+  - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent', value: 'DisableWindowsConsumerFeatures', type: REG_DWORD, data: '1', option: 'profile-privacy'}
+  - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent', value: 'DisableSoftLanding', type: REG_DWORD, data: '1', option: 'profile-privacy'}
+  # Disable Activity History
+  - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\System', value: 'EnableActivityFeed', type: REG_DWORD, data: '0', option: 'profile-privacy'}
+  - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\System', value: 'PublishUserActivities', type: REG_DWORD, data: '0', option: 'profile-privacy'}
+  - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\System', value: 'UploadUserActivities', type: REG_DWORD, data: '0', option: 'profile-privacy'}
+  # Disable Location tracking
+  - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors', value: 'DisableLocation', type: REG_DWORD, data: '1', option: 'profile-privacy'}
+  - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors', value: 'DisableWindowsLocationProvider', type: REG_DWORD, data: '1', option: 'profile-privacy'}
+  # Disable Advertising ID
+  - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo', value: 'DisabledByGroupPolicy', type: REG_DWORD, data: '1', option: 'profile-privacy'}
+
+  # ════════════════════════════════════════════════════════════════
+  # SECTION 8: BACKGROUND DEPRIORITIZATION (All Modes)
+  # ════════════════════════════════════════════════════════════════
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\MoUsoCoreWorker.exe\PerfOptions', value: 'CpuPriorityClass', type: REG_DWORD, data: '5'}
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\CompatTelRunner.exe\PerfOptions', value: 'CpuPriorityClass', type: REG_DWORD, data: '5'}
+
+  - !registryValue: {path: 'HKLM\SYSTEM\CurrentControlSet\Control\Wdf', value: 'WdfGlobalLogsDisabled', type: REG_DWORD, data: '1'}
+
+  # ════════════════════════════════════════════════════════════════
+  # SECTION 9: FINAL CLEANUP (All Modes — Mereng-OS ResetBase + Perf Counter Fix)
+  # ════════════════════════════════════════════════════════════════
+  - !run: {exe: 'DISM.exe', args: '/Online /Cleanup-Image /StartComponentCleanup /ResetBase', wait: true, ignoreErrors: true, weight: 50}
+  - !run: {exe: 'lodctr', args: '/r', ignoreErrors: true}
+  - !run: {exe: 'winmgmt', args: '/resyncperf', ignoreErrors: true}

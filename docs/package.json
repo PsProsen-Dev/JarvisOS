@@ -1,0 +1,32 @@
+{
+  "name": "jarvisos",
+  "version": "1.0.0",
+  "description": "> A custom Windows 11 AME playbook for full-stack developers: privacy-first, clean, fast, and dev-tool friendly.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "mintlify dev",
+    "mcp": "npx @mintlify/mcp",
+    "test": "npm run test:mint && npm run test:apbx",
+    "test:mint": "node tests/mint.test.js",
+    "test:apbx": "pwsh -NoProfile -Command \"Invoke-Pester -Path .\\\\tests\\\\rebuild-apbx.Tests.ps1\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PsProsen-Dev/JarvisOS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/PsProsen-Dev/JarvisOS/issues"
+  },
+  "homepage": "https://github.com/PsProsen-Dev/JarvisOS#readme",
+  "dependencies": {
+    "@mintlify/mcp": "latest",
+    "mintlify": "latest"
+  }
+}

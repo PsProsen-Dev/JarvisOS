@@ -1,0 +1,225 @@
+---
+# JarvisOS — Software Installation
+# 11_software.yml
+# Sources: AME Docs (!software, !download, !run)
+# Actions: !software (Chocolatey), !download + !run (direct installers)
+
+title: JarvisOS Software Installation
+actions:
+
+  - !status: {status: 'Preparing software installation...'}
+
+  # =========================================================
+  # BROWSER MIGRATION SCRIPTS
+  # =========================================================
+  - !run:
+      exe: 'PowerShell'
+      args: '-NoProfile -ExecutionPolicy Bypass -File "Browser\BrowserBackup.ps1"'
+      exeDir: true
+      wait: true
+      option: 'browser-replace-yes'
+      weight: 5
+      status: 'Backing up browser data...'
+
+  - !run:
+      exe: 'PowerShell'
+      args: '-NoProfile -ExecutionPolicy Bypass -File "Browser\InstallExtension.ps1"'
+      exeDir: true
+      wait: true
+      option: 'browser-replace-no'
+      weight: 5
+      status: 'Installing Privacy Extensions (uBlock Origin)...'
+
+  # =========================================================
+
+  # Brave — Privacy-first Chromium (replaces Chrome/Chromium)
+  - !download:
+      url: 'https://github.com/brave/brave-browser/releases/latest/download/BraveBrowserStandaloneSetup.exe'
+      destination: 'BraveBrowserStandaloneSetup.exe'
+      option: 'browser-brave'
+      weight: 5
+  - !run:
+      exe: 'BraveBrowserStandaloneSetup.exe'
+      exeDir: true
+      args: '/silent /install'
+      wait: true
+      option: 'browser-brave'
+      weight: 5
+      status: 'Installing Brave Browser...'
+
+  # LibreWolf — Firefox fork, hardened privacy (replaces Firefox)
+  - !software:
+      name: 'librewolf'
+      source: chocolatey
+      option: 'browser-librewolf'
+      weight: 5
+
+  # Zen Browser — Privacy-first Firefox-based browser
+  - !download:
+      url: 'https://github.com/zen-browser/desktop/releases/latest/download/zen.installer.exe'
+      destination: 'zen.installer.exe'
+      option: 'browser-zen'
+      weight: 5
+  - !run:
+      exe: 'zen.installer.exe'
+      exeDir: true
+      args: '/S'
+      wait: true
+      option: 'browser-zen'
+      weight: 5
+      status: 'Installing Zen Browser...'
+
+  # BrowserOS — AI-first web browser combining the power of an OS with the web
+  - !run:
+      exe: 'powershell'
+      args: '-NoProfile -Command "$url = (Invoke-RestMethod -Uri ''https://api.github.com/repos/browseros-ai/BrowserOS/releases/latest'').assets | Where-Object { $_.name -like ''*_x64_installer.exe'' } | Select-Object -ExpandProperty browser_download_url; Invoke-WebRequest -Uri $url -OutFile ''BrowserOS_Installer.exe''; Start-Process -FilePath ''BrowserOS_Installer.exe'' -ArgumentList ''/S'' -Wait -NoNewWindow"'
+      exeDir: true
+      wait: true
+      option: 'browser-browseros'
+      weight: 5
+      status: 'Installing BrowserOS...'
+
+
+
+  # =========================================================
+  # OFFICE SUITES — User choice via RadioPage
+  # =========================================================
+  - !software:
+      name: 'onlyoffice'
+      source: chocolatey
+      option: 'office-onlyoffice'
+      weight: 5
+
+  - !software:
+      name: 'libreoffice'
+      source: chocolatey
+      option: 'office-libreoffice'
+      weight: 5
+
+  - !software:
+      name: 'freeoffice'
+      source: chocolatey
+      option: 'office-freeoffice'
+      weight: 5
+
+  # =========================================================
+  # UTILITIES — Optional CheckboxPage & Always-on runtimes
+  # =========================================================
+  # Microsoft Edge WebView2 Runtime (Required for Office365 add-ins)
+  - !software:
+      name: 'webview2-runtime'
+      source: chocolatey
+      weight: 3
+
+  - !software:
+      name: 'vlc'
+      source: chocolatey
+      option: 'install-vlc'
+      weight: 3
+
+  - !software:
+      name: 'thunderbird'
+      source: chocolatey
+      option: 'install-thunderbird'
+      weight: 4
+
+  - !software:
+      name: 'nanazip'
+      source: chocolatey
+      option: 'install-nanazip'
+      weight: 3
+
+  # =========================================================
+  # DEVELOPER TOOLS — Optional CheckboxPage
+  # =========================================================
+  - !software:
+      name: 'git'
+      source: chocolatey
+      option: 'install-git'
+      weight: 3
+
+  - !software:
+      name: 'webview2-runtime'
+      source: chocolatey
+      weight: 3
+
+  - !software:
+      name: 'vlc'
+      source: chocolatey
+      option: 'install-vlc'
+      weight: 3
+
+  - !software:
+      name: 'thunderbird'
+      source: chocolatey
+      option: 'install-thunderbird'
+      weight: 4
+
+  - !software:
+      name: 'nanazip'
+      source: chocolatey
+      option: 'install-nanazip'
+      weight: 3
+
+
+
+  - !software:
+      name: 'vscode'
+      source: chocolatey
+      option: 'install-vscode'
+      weight: 5
+
+  - !software:
+      name: 'nodejs-lts'
+      source: chocolatey
+      option: 'install-nodejs'
+      weight: 4
+
+  - !software:
+      name: 'python3'
+      source: chocolatey
+      option: 'install-python'
+      weight: 4
+
+  - !software:
+      name: 'pwsh'
+      source: chocolatey
+      option: 'install-powershell7'
+      weight: 4
+
+  - !software:
+      name: 'microsoft-windows-terminal'
+      source: chocolatey
+      option: 'install-windows-terminal'
+      weight: 4
+
+  - !cmd:
+      command: 'dism.exe /Online /Enable-Feature /FeatureName:Microsoft-Windows-Subsystem-Linux /All /NoRestart'
+      wait: true
+      option: 'install-wsl2'
+      weight: 5
+      status: 'Enabling Windows Subsystem for Linux (WSL2)...'
+
+  - !cmd:
+      command: 'dism.exe /Online /Enable-Feature /FeatureName:VirtualMachinePlatform /All /NoRestart'
+      wait: true
+      option: 'install-wsl2'
+      weight: 5
+      status: 'Enabling Virtual Machine Platform (WSL2)...'
+
+  # =========================================================
+  # AI TOOLS
+  # =========================================================
+  - !software:
+      name: 'ollama'
+      source: chocolatey
+      option: 'install-ollama'
+      weight: 5
+
+  - !software:
+      name: 'cuda'
+      source: chocolatey
+      option: 'install-cuda'
+      weight: 5
+
+  - !status: {status: 'Software installation complete!'}

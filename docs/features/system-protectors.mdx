@@ -1,0 +1,93 @@
+---
+title: 'System Protectors'
+description: 'AtlasOS Toolbox and Revision Tool — keeping your environment stable and tuned.'
+icon: 'shield-halved'
+---
+
+# System Protectors
+
+JarvisOS ships with two post-install maintenance tools that keep your environment stable, clean, and under control: **AtlasOS Toolbox** and **Revision Tool**.
+
+Both are installed to `C:\Program Files\JarvisOS Tools` with desktop shortcuts created automatically.
+
+---
+
+## AtlasOS Toolbox
+
+The AtlasOS Toolbox is a comprehensive system management GUI with 80+ toggles across every major Windows subsystem. JarvisOS bundles it because it provides the cleanest approach to update management and system configuration available in the AME ecosystem.
+
+### Key Capabilities
+
+<CardGroup cols={2}>
+  <Card title="Update Management" icon="arrows-rotate">
+    Enable and disable Windows Update on demand. The recommended workflow: toggle on → patch → toggle off. Prevents unwanted component reinstalls.
+  </Card>
+  <Card title="Power Plans" icon="bolt">
+    Switch between balanced, high-performance, and ultimate performance power plans. Developer workloads benefit from Ultimate Performance.
+  </Card>
+  <Card title="Network Tweaks" icon="network-wired">
+    TCP/IP stack tuning, DNS configuration, and network adapter settings without touching the registry manually.
+  </Card>
+  <Card title="System Cleanup" icon="broom">
+    Temp file purge, prefetch cleanup, and system restore point management from a single panel.
+  </Card>
+</CardGroup>
+
+### Location
+
+```
+C:\Program Files\JarvisOS Tools\AtlasDesktop\
+C:\Windows\AtlasModules\   ← PowerShell backend modules
+```
+
+Launch from the desktop shortcut or from the Start Menu.
+
+---
+
+## Revision Tool
+
+The Revision Tool is the maintenance companion from the ReviOS ecosystem. JarvisOS includes it with ReviOS compatibility markers so it runs at full capability.
+
+### What It Handles
+
+- System integrity checks without triggering SFC reversions
+- Cleanup of residual files from Windows Update sessions
+- Configuration resets for specific Windows subsystems
+- Quick diagnostics for common post-AME issues
+
+<Note>
+The Revision Tool shows full functionality because JarvisOS includes ReviOS compatibility markers in the build. If it prompts for a ReviOS environment check, it will pass.
+</Note>
+
+---
+
+## Windows Defender
+
+JarvisOS leaves Windows Defender **enabled by default**. This is an intentional choice — removing Defender requires trusting your entire software supply chain.
+
+If you want to disable it:
+
+```powershell
+# Via Privacy+ Settings CLI
+ame-settings-cli set defender --state off
+```
+
+Or use the optional Defender removal option in the AtlasOS Toolbox.
+
+<Warning>
+Disabling Defender is a one-way operation without a reinstall. Only do this if you have a specific reason and understand the risk surface.
+</Warning>
+
+---
+
+## Print Spooler
+
+The Windows Print Spooler (`spoolsv.exe`) is disabled by default in JarvisOS as a PrintNightmare mitigation. If you need to print:
+
+```powershell
+# Enable via AtlasOS Toolbox → Services → Print Spooler
+# Or via Privacy+ Settings CLI:
+ame-settings-cli set spooler --state on
+```
+
+Disable it again when done — there is no reason to keep it running permanently on a developer workstation.

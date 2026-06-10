@@ -1,0 +1,98 @@
+---
+title: 'Privacy+ Settings CLI'
+description: 'Command-line interface for low-level OS privacy and configuration control.'
+icon: 'terminal'
+---
+
+# Privacy+ Settings CLI
+
+**`ame-settings-cli`** is the command-line interface from the Ameliorated ecosystem that gives you direct, surgical control over Windows privacy settings, system toggles, and registry-level configuration.
+
+JarvisOS installs it automatically as part of the maintenance tools suite.
+
+---
+
+## What It Does
+
+The Privacy+ Settings CLI bypasses the Windows Settings UI entirely. Instead of toggling switches in a bloated interface that often doesn't stick, it directly writes registry overrides and Group Policy nullifications — so when you turn something off, it stays off.
+
+<Note>
+This tool is maintained by the Ameliorated team. JarvisOS bundles it as a convenience — it is not a JarvisOS-specific tool.
+</Note>
+
+---
+
+## Basic Usage
+
+```powershell
+ame-settings-cli [command] [target] --state [on|off]
+```
+
+Run as Administrator from an elevated terminal.
+
+---
+
+## Common Toggles
+
+<Tabs>
+  <Tab title="Telemetry">
+    Disable residual diagnostic tracking services and data harvesting endpoints.
+    ```powershell
+    ame-settings-cli set telemetry --state off
+    ```
+    Note: JarvisOS already removes the primary telemetry stack. Use this for fine-tuned control of remaining optional components.
+  </Tab>
+  <Tab title="Defender">
+    Toggle Windows Defender on or off. JarvisOS leaves Defender enabled by default for security. Disable only if you have a trusted alternative.
+    ```powershell
+    ame-settings-cli set defender --state off
+    ```
+  </Tab>
+  <Tab title="SmartScreen">
+    Disable SmartScreen filtering (sends application hashes to Microsoft).
+    ```powershell
+    ame-settings-cli set smartscreen --state off
+    ```
+  </Tab>
+  <Tab title="Updates">
+    Toggle Windows Update connectivity.
+    ```powershell
+    ame-settings-cli set updates --state off
+    ```
+    Prefer managing updates via the AtlasOS Toolbox for a safer workflow.
+  </Tab>
+</Tabs>
+
+---
+
+## Batch Configuration
+
+For a full lockdown pass, create a JSON config file and apply all targets at once:
+
+```json
+{
+  "targets": {
+    "telemetry": false,
+    "smartscreen": false,
+    "cortana": false,
+    "advertising-id": false
+  }
+}
+```
+
+```powershell
+ame-settings-cli apply --config lockdown.json
+```
+
+---
+
+## Get Help
+
+```powershell
+ame-settings-cli --help
+ame-settings-cli [command] --help
+```
+
+<Warning>
+Do not use `services.msc` or direct registry edits to override settings managed by this tool. Changes may conflict with each other. Use the CLI exclusively for toggling managed settings.
+</Warning>

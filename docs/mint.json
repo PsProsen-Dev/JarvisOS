@@ -1,0 +1,74 @@
+{
+    "$schema": "https://mintlify.com/schema.json",
+    "name": "JarvisOS",
+    "logo": {
+        "dark": "/logo/jarvis_logo.png",
+        "light": "/logo/jarvis_logo.png"
+    },
+    "favicon": "/logo/jarvis_logo.png",
+    "colors": {
+        "primary": "#39FF14",
+        "light": "#8FFF75",
+        "dark": "#1A8A00",
+        "anchors": {
+            "from": "#39FF14",
+            "to": "#00F3FF"
+        }
+    },
+    "topbarLinks": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/PsProsen-Dev/JarvisOS"
+        }
+    ],
+    "topbarCtaButton": {
+        "name": "Download Playbook",
+        "url": "https://github.com/PsProsen-Dev/JarvisOS/releases/latest"
+    },
+    "tabs": [
+        {
+            "name": "Overview",
+            "url": "docs"
+        },
+        {
+            "name": "Features",
+            "url": "docs/features"
+        }
+    ],
+    "navigation": [
+        {
+            "group": "Getting Started",
+            "pages": [
+                "docs/introduction",
+                "docs/features/comparison",
+                "docs/installation/getting-started",
+                "docs/installation/post-install"
+            ]
+        },
+        {
+            "group": "Core Tools",
+            "pages": [
+                "docs/features/privacy-plus-cli",
+                "docs/features/app-fetch",
+                "docs/features/system-protectors",
+                "docs/features/hardware-stripping",
+                "docs/features/browsers"
+            ]
+        },
+        {
+            "group": "Support",
+            "pages": [
+                "docs/support/faq",
+                "docs/support/troubleshooting"
+            ]
+        }
+    ],
+    "modeToggle": {
+        "default": "dark",
+        "isHidden": true
+    },
+    "footerSocials": {
+        "github": "https://github.com/PsProsen-Dev/JarvisOS",
+        "discord": "https://discord.gg/jarvisos"
+    }
+}

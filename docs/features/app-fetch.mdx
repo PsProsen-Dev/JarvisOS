@@ -1,0 +1,94 @@
+---
+title: 'App Fetch'
+description: 'Install UWP apps without the Microsoft Store.'
+icon: 'download'
+---
+
+# App Fetch
+
+The Microsoft Store is removed in JarvisOS. **App Fetch** is its replacement — a clean, telemetry-free tool for sideloading UWP (Universal Windows Platform) applications directly from their source.
+
+JarvisOS installs App Fetch automatically as part of the maintenance tools suite.
+
+---
+
+## What It Does
+
+App Fetch hooks into Windows' native Appx deployment APIs to install `.appxbundle` and `.msixbundle` packages directly, without routing through Microsoft's Store infrastructure or its associated telemetry endpoints.
+
+It handles:
+- Cryptographic signature verification
+- Dependency resolution (VCLibs, .NET Native frameworks)
+- Silent background installation
+- Local package caching
+
+---
+
+## Basic Usage
+
+```powershell
+app-fetch install <PackageID_or_URL>
+```
+
+Run as Administrator from an elevated terminal.
+
+---
+
+## Examples
+
+<Tabs>
+  <Tab title="From a URL">
+    Install directly from a GitHub release or any direct download link.
+    ```powershell
+    app-fetch install https://github.com/user/repo/releases/latest/download/app.msixbundle
+    ```
+  </Tab>
+  <Tab title="From a local file">
+    Sideload a package you already have downloaded.
+    ```powershell
+    app-fetch install C:\Downloads\Terminal.appxbundle
+    ```
+  </Tab>
+  <Tab title="Re-deploy Store">
+    If you specifically need the Microsoft Store for a workflow that has no alternative:
+    ```powershell
+    app-fetch deploy --target ms-store
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## Dependency Cache
+
+App Fetch maintains a local cache of framework dependencies at `%PROGRAMDATA%\AppFetch\Cache` to avoid re-downloading on subsequent installs.
+
+Clear the cache:
+
+```powershell
+app-fetch clean --cache
+```
+
+---
+
+## Recommended Alternatives to Store Apps
+
+| Store App | Replacement |
+|-----------|-------------|
+| Edge | Brave / LibreWolf / Ungoogled Chromium |
+| Microsoft Photos | IrfanView / nomacs |
+| Microsoft Media Player | mpv / VLC |
+| Microsoft To Do | Obsidian / Logseq |
+| Office Online | OnlyOffice (already installed by JarvisOS) |
+
+<Tip>
+For most developer tools, prefer **WinGet** or **Chocolatey** over App Fetch. App Fetch is specifically designed for UWP/MSIX packages that are not available via those package managers.
+</Tip>
+
+```powershell
+# WinGet is preserved and ready to use
+winget install <PackageName>
+
+# Chocolatey (install separately)
+choco install <PackageName>
+```

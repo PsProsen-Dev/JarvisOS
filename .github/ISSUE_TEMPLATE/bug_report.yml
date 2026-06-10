@@ -1,0 +1,104 @@
+name: 🐛 Bug Report
+description: Something broke after applying the JarvisOS playbook.
+title: "[BUG] "
+labels: ["bug", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Before You Submit
+        - Check the [FAQ](https://jarvisos.mintlify.app/docs/support/faq) and [Troubleshooting Guide](https://jarvisos.mintlify.app/docs/support/troubleshooting)
+        - Search [existing issues](https://github.com/PsProsen-Dev/JarvisOS/issues) to avoid duplicates
+        - **Always test in a VM first** before applying to a production system
+
+  - type: input
+    id: version
+    attributes:
+      label: JarvisOS Version
+      description: Which version of the playbook were you using?
+      placeholder: "e.g. 30.05.26"
+    validations:
+      required: true
+
+  - type: input
+    id: windows_build
+    attributes:
+      label: Windows 11 Build Number
+      description: Run `winver` and paste the build number here.
+      placeholder: "e.g. 22631.4602"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: Where did you apply the playbook?
+      options:
+        - Virtual Machine (VMware)
+        - Virtual Machine (VirtualBox)
+        - Virtual Machine (Hyper-V)
+        - Physical Machine (bare metal)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: install_options
+    attributes:
+      label: Selected Options During Install
+      description: Which options did you select? (select all that apply)
+      multiple: true
+      options:
+        - Brave Browser
+        - LibreWolf
+        - Zen Browser
+        - Ungoogled Chromium
+        - OnlyOffice
+        - LibreOffice
+        - FreeOffice
+        - Git
+        - VS Code
+        - Node.js LTS
+        - Privacy+ Settings
+        - App Fetch
+        - AtlasOS Toolbox
+        - Revision Tool
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: What happened? What did you expect to happen?
+      placeholder: "Describe the bug clearly and concisely..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this?
+      placeholder: |
+        1. Applied playbook with options X, Y, Z
+        2. After reboot, opened...
+        3. Observed...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: AME Wizard Logs / Error Messages
+      description: Paste relevant logs or error messages here.
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Screenshots, hardware specs, anything else relevant.
+    validations:
+      required: false

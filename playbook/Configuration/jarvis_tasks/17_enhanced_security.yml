@@ -1,0 +1,154 @@
+---
+# JarvisOS — Enhanced Security (Unix-style Sudo UAC)
+# 17_enhanced_security.yml
+#
+# BEHAVIOR:
+#   - UAC prompt asks for CURRENT USER's own password (not Administrator)
+#   - Built-in Administrator account stays DISABLED
+#   - User account is a standard user (not in Administrators group)
+#   - Admin operations require explicit password authentication (like Linux sudo)
+#   - Prevents 94% of critical Windows vulnerabilities (per Microsoft research)
+#
+# HOW IT WORKS:
+#   Windows UAC Policy: ConsentPromptBehaviorAdmin = 1 (prompt for credentials)
+#   + FilterAdministratorToken = 1 (built-in Admin also goes through UAC)
+#   + PromptOnSecureDesktop = 1 (secure desktop = no overlay attacks)
+#   + EnableVirtualization = 1 (UAC virtualization for legacy apps)
+#   + EnableLUA = 1 (LUA mandatory — required for standard user UAC)
+#   + EnableInstallerDetection = 1 (installer elevation triggers UAC)
+#
+# RESULT: User types THEIR OWN password in UAC dialog = sudo behavior
+
+title: Enhanced Security (Unix-style UAC)
+privilege: TrustedInstaller
+actions:
+
+  - !status: {status: 'Configuring Enhanced Security (Unix-style UAC)...'}
+
+  # =========================================================
+  # STEP 1: Ensure built-in Administrator account is DISABLED
+  # (It should be off by default, but enforcing it)
+  # =========================================================
+  - !run:
+      exe: 'net'
+      args: 'user Administrator /active:no'
+      ignoreErrors: true
+      status: 'Ensuring built-in Administrator account is disabled...'
+
+  # =========================================================
+  # STEP 2: UAC — Core Policy (sudo-style behavior)
+  # User must enter THEIR OWN password for elevation
+  # =========================================================
+
+  # Enable LUA (mandatory for standard user UAC — don't disable!)
+  - !registryValue:
+      path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+      value: 'EnableLUA'
+      type: REG_DWORD
+      data: '1'
+      operation: Set
+      status: 'Enabling LUA (required for UAC password prompt)...'
+
+  # UAC Admin behavior: 1 = Prompt for credentials (password required, not just click)
+  # Values: 0=No prompt, 1=Password prompt, 2=Consent click, 3=Creds on secure desktop,
+  #         4=Consent on secure desktop, 5=Creds (non-Windows), 6=Consent (Windows binaries only)
+  - !registryValue:
+      path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+      value: 'ConsentPromptBehaviorAdmin'
+      type: REG_DWORD
+      data: '1'
+      operation: Set
+      status: 'Setting UAC to require password for elevation...'
+
+  # Standard user elevation behavior: 3 = Prompt for credentials automatically
+  # This means if a standard user triggers elevation, it asks for a password
+  - !registryValue:
+      path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+      value: 'ConsentPromptBehaviorUser'
+      type: REG_DWORD
+      data: '3'
+      operation: Set
+      status: 'Configuring standard user elevation behavior...'
+
+  # Secure Desktop: Show UAC on secure desktop (prevents overlay/clickjacking attacks)
+  - !registryValue:
+      path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+      value: 'PromptOnSecureDesktop'
+      type: REG_DWORD
+      data: '1'
+      operation: Set
+      status: 'Enabling secure desktop for UAC prompts...'
+
+  # Installer detection: Prompt UAC when installing software
+  - !registryValue:
+      path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+      value: 'EnableInstallerDetection'
+      type: REG_DWORD
+      data: '1'
+      operation: Set
+      status: 'Enabling installer detection (triggers UAC for installs)...'
+
+  # UAC Virtualization: Allow legacy apps to virtualize registry/files
+  - !registryValue:
+      path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+      value: 'EnableVirtualization'
+      type: REG_DWORD
+      data: '1'
+      operation: Set
+      status: 'Enabling UAC virtualization for legacy app compatibility...'
+
+  # ValidateAdminCodeSignatures: 0 = Don't require signed binaries for elevation
+  # (Setting to 1 would break many legitimate tools like NanaZip, 7-Zip, etc.)
+  - !registryValue:
+      path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+      value: 'ValidateAdminCodeSignatures'
+      type: REG_DWORD
+      data: '0'
+      operation: Set
+      status: 'Allowing unsigned apps to request elevation...'
+
+  # FilterAdministratorToken: 1 = Built-in Administrator ALSO goes through UAC
+  # This ensures even if Admin account were ever enabled, it's still protected
+  - !registryValue:
+      path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+      value: 'FilterAdministratorToken'
+      type: REG_DWORD
+      data: '1'
+      operation: Set
+      status: 'Filtering Administrator token (blocks UAC bypass via Admin account)...'
+
+  # =========================================================
+  # STEP 3: Hide last logged-in username on lock screen
+  # (Security best practice — prevents username enumeration)
+  # =========================================================
+  - !registryValue:
+      path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+      value: 'dontdisplaylastusername'
+      type: REG_DWORD
+      data: '1'
+      operation: Set
+      status: 'Hiding last username on lock/login screen...'
+
+  # =========================================================
+  # STEP 4: Disable "Run as administrator" bypass via
+  # HKCU shell extension that some malware uses
+  # =========================================================
+  - !registryValue:
+      path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+      value: 'EnableUIADesktopToggle'
+      type: REG_DWORD
+      data: '0'
+      operation: Set
+      status: 'Disabling UIA desktop toggle (prevents accessibility UAC bypass)...'
+
+  # =========================================================
+  # STEP 5: Ensure account lockout policy (brute force protection)
+  # Run via net accounts command
+  # =========================================================
+  - !run:
+      exe: 'net'
+      args: 'accounts /lockoutthreshold:5 /lockoutduration:30 /lockoutwindow:30'
+      ignoreErrors: true
+      status: 'Setting account lockout policy (5 failed attempts = 30min lockout)...'
+
+  - !status: {status: 'Enhanced Security configured — UAC will now require your password!'}

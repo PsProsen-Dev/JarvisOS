@@ -1,0 +1,12 @@
+---
+title: OEM Information
+description: Configure OEM Information
+privilege: TrustedInstaller
+actions:
+
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation', value: 'HelpCustomized', type: REG_DWORD, data: '1'}
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation', value: 'Manufacturer', type: REG_SZ, data: 'JarvisOS'}
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation', value: 'SupportProvider', type: REG_SZ, data: 'JarvisOS'}
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation', value: 'SupportAppURL', type: REG_SZ, data: 'jarvisos-support-help'}
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation', value: 'SupportURL', type: REG_SZ, data: 'https://github.com/PsProsen-Dev/JarvisOS/discussions'}
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation', value: 'SupportPhone', type: REG_SZ, data: 'Docs: https://jarvisos.mintlify.app/'}

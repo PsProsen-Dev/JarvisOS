@@ -1,0 +1,70 @@
+name: 🖥️ Hardware Compatibility
+description: A specific hardware device or driver is not working after applying JarvisOS.
+title: "[HARDWARE] "
+labels: ["hardware", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        JarvisOS removes legacy driver packages and disables the Print Spooler by default. If your hardware is not working, this template helps us track compatibility issues.
+
+  - type: input
+    id: version
+    attributes:
+      label: JarvisOS Version
+      placeholder: "e.g. 30.05.26"
+    validations:
+      required: true
+
+  - type: input
+    id: windows_build
+    attributes:
+      label: Windows 11 Build
+      placeholder: "e.g. 22631"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: hardware_type
+    attributes:
+      label: Hardware Type
+      options:
+        - GPU (NVIDIA)
+        - GPU (AMD)
+        - GPU (Intel)
+        - Network card / WiFi
+        - Audio interface
+        - Printer / Scanner
+        - USB device
+        - Drawing tablet
+        - Monitor / Display
+        - Storage controller
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: hardware_model
+    attributes:
+      label: Hardware Model
+      description: Make and model of the affected hardware.
+      placeholder: "e.g. NVIDIA RTX 4070, Realtek RTL8111"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What is not working?
+      placeholder: "After applying JarvisOS, my X device is not detected / not functioning..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: driver_attempted
+    attributes:
+      label: Drivers Attempted
+      description: What drivers did you try installing? From where?
+    validations:
+      required: false

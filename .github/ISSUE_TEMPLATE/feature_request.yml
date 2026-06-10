@@ -1,0 +1,66 @@
+name: 💡 Feature Request
+description: Suggest a new option, tweak, or tool for JarvisOS.
+title: "[FEATURE] "
+labels: ["enhancement"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before suggesting a feature, check that it fits JarvisOS's scope:
+        - **Developer workstation** focused — not gaming
+        - No Xbox, Steam, or gaming-specific features
+        - Must preserve WSL2, Hyper-V, Docker, .NET
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Feature Category
+      options:
+        - New registry tweak
+        - New service to remove / disable
+        - New app to remove
+        - New browser option at install
+        - New office suite option at install
+        - New developer tool option at install
+        - New maintenance tool
+        - Performance improvement
+        - Security hardening
+        - UI / install experience
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature Description
+      description: What do you want added or changed? Be specific.
+      placeholder: "I'd like JarvisOS to include X because..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: source
+    attributes:
+      label: Source / Reference (optional)
+      description: Is this inspired by AtlasOS, ReviOS, Privacy+, or another playbook? Link the relevant config or registry path.
+    validations:
+      required: false
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Developer Impact
+      description: How does this improve the developer workflow? Why should it be in JarvisOS?
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: tested
+    attributes:
+      label: Have you tested this tweak?
+      options:
+        - label: Yes — I tested this in a VM and it works
+        - label: No — this is a suggestion only

@@ -1,0 +1,91 @@
+---
+title: 'Hardware & Driver Notes'
+description: 'What JarvisOS removes from the driver store and how to manage hardware on a clean install.'
+---
+
+# Hardware & Driver Notes
+
+JarvisOS removes legacy driver packages that modern developer workstations will never use. This reduces the driver store footprint, shrinks non-paged pool memory usage, and keeps the boot process lean.
+
+---
+
+## What Gets Removed
+
+<CardGroup cols={2}>
+  <Card title="Legacy Print Drivers" icon="print">
+    Hundreds of megabytes of bundled HP, Canon, Brother, and Epson printer driver packages are removed. The Print Spooler service is disabled by default.
+  </Card>
+  <Card title="Obsolete Network Drivers" icon="ethernet">
+    Legacy dial-up modem, ISDN adapter, and outdated 10/100 Ethernet card support is stripped. Modern NIC drivers are unaffected.
+  </Card>
+  <Card title="Unused Bluetooth Profiles" icon="bluetooth">
+    Legacy Bluetooth stacks and older profile handlers not relevant to modern developer hardware.
+  </Card>
+  <Card title="Legacy Storage Controllers" icon="hard-drive">
+    Obsolete IDE and SCSI controller drivers removed. NVMe, SATA, and USB storage are fully preserved.
+  </Card>
+</CardGroup>
+
+---
+
+## Installing Your Own Drivers
+
+JarvisOS does **not** fetch drivers via Windows Update by default. Get them directly from your hardware manufacturer — cleaner, faster, no bundled software.
+
+| Hardware | Recommended Source |
+|----------|-------------------|
+| **NVIDIA GPU** | [nvidia.com/drivers](https://nvidia.com/drivers) |
+| **AMD GPU** | [amd.com/support](https://amd.com/support) |
+| **Intel GPU** | [intel.com/content/www/us/en/support](https://intel.com/support) |
+| **AMD Chipset** | AMD's chipset driver page directly |
+| **Intel Chipset** | Intel's DSA (Driver & Support Assistant) |
+| **Audio** | Realtek, Creative, etc. — bare driver INF preferred |
+| **Network** | Intel / Realtek NIC drivers — skip management software |
+
+<Tip>
+For NVIDIA: Use **NVCleanstall** to install GPU drivers without GeForce Experience, telemetry modules, or the control panel bloat.
+</Tip>
+
+---
+
+## Using Windows Update for Drivers (One-Time)
+
+If you need Windows Update to fetch a driver that is not available directly:
+
+1. Open **AtlasOS Toolbox** from your desktop
+2. Go to **Windows Update → Enable**
+3. Run Windows Update — install only what you need
+4. Go back to **Windows Update → Disable**
+
+<Warning>
+Do not leave Windows Update permanently enabled. Microsoft may push updates that restore mitigated components or re-enable telemetry services.
+</Warning>
+
+---
+
+## Memory Impact
+
+By removing legacy driver packages from the Windows Driver Store:
+
+- Non-paged pool memory freed: ~150MB
+- Boot time reduction on NVMe: ~2–3 seconds
+- Driver Store size reduction: 400MB+
+
+These are not gaming-focused optimizations — they are general system hygiene that benefits compile times, VM startup, and terminal responsiveness.
+
+---
+
+## Peripheral Hardware
+
+If you use specialized hardware (drawing tablets, audio interfaces, custom peripherals), install drivers manually from the manufacturer's website. JarvisOS will not auto-fetch them.
+
+```powershell
+# Check what drivers are currently installed
+Get-WmiObject Win32_PnPSignedDriver | Select-Object DeviceName, DriverVersion, Manufacturer
+```
+
+For generic printer support without OEM bloat:
+
+```powershell
+app-fetch drivers --generic-printers
+```

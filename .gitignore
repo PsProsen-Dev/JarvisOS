@@ -1,0 +1,51 @@
+# Scan outputs (system-specific, don't commit)
+00_baseline/
+01_revios/*.csv
+01_revios/*.json
+01_revios/*.txt
+02_atlas/*.csv
+02_atlas/*.json
+02_atlas/*.txt
+03_privacy_plus/*.csv
+03_privacy_plus/*.json
+03_privacy_plus/*.txt
+
+# Windows
+Thumbs.db
+desktop.ini
+*.tmp
+*.tmp*
+
+# Local agent/doc crawl caches
+.antigravitycli/
+docs_ame_full/
+
+# Graphify generated files (large binary/HTML - regenerate locally)
+# GRAPH_REPORT.md is committed; graph.json and graph.html are not
+graphify-out/graph.json
+graphify-out/graph.html
+graphify-out/manifest.json
+graphify-out/cache/
+graphify-out/.graphify_*
+
+.env
+node_modules/
+
+# Local agent/runtime artifacts
+.agents/
+.u2net/
+*.apbx
+run_swarm*.ps1
+swarm_report*.md
+*.patch
+*.graphql
+create_discussions.py
+
+# Build/runtime directories that should not be packaged or committed
+05_build/Configuration/tasks/.venv/
+
+# Archives and Logs
+archive/
+*.log
+reports/
+graphify-out/

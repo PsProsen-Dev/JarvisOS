@@ -1,0 +1,74 @@
+name: ⚙️ Playbook Issue
+description: A specific YAML task, registry entry, or component removal caused a problem.
+title: "[PLAYBOOK] "
+labels: ["playbook", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for issues with a **specific playbook action** — a registry tweak that broke something, a service removal that caused a problem, or a component removal that had unexpected side effects.
+
+  - type: input
+    id: version
+    attributes:
+      label: JarvisOS Version
+      placeholder: "e.g. 30.05.26"
+    validations:
+      required: true
+
+  - type: input
+    id: windows_build
+    attributes:
+      label: Windows 11 Build
+      placeholder: "e.g. 22631"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: task_file
+    attributes:
+      label: Affected Task File
+      description: Which YAML task file is likely responsible?
+      options:
+        - 01_services.yml (Service removals)
+        - 02_registry.yml (Registry tweaks)
+        - 03_appx.yml (App removals)
+        - 04_scheduled_tasks.yml (Scheduled task cleanup)
+        - 05_components.yml (Edge / OneDrive / IE removal)
+        - 06_performance.yml (Performance tweaks)
+        - 08_security.yml (Security options)
+        - 09_files.yml (File cleanup)
+        - 10_config.yml (BitLocker / NTP / UAC)
+        - 11_software.yml (Browser / Office installs)
+        - 12_maintenance_tools.yml (Tool installs)
+        - Unknown / Not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What broke?
+      description: Describe the issue and what functionality was affected.
+      placeholder: "After applying the playbook, X stopped working. The specific symptom is..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: registry_service
+    attributes:
+      label: Registry Key / Service / App (if known)
+      description: If you know the specific registry path, service name, or app that caused the issue, paste it here.
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: fix
+    attributes:
+      label: Proposed Fix (optional)
+      description: If you already found a fix or workaround, share it here — this helps speed up the fix.
+      render: yaml
+    validations:
+      required: false

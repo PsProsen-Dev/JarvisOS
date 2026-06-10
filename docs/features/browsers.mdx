@@ -1,0 +1,43 @@
+---
+title: 'Curated Browsers'
+description: 'Why JarvisOS enforces specific browser choices.'
+icon: 'globe'
+---
+
+# Curated Browsers
+
+The default web browser is the most heavily utilized vector for data collection, telemetry harvesting, and forced feature updates. JarvisOS completely purges Microsoft Edge and the associated Edge WebView2 bloat to prevent system-level tracking.
+
+Instead of leaving users without a browser, the playbook provides a curated selection of privacy-hardened alternatives during installation.
+
+## Why LibreWolf Replaced Firefox
+
+While Mozilla Firefox is often touted as a privacy-friendly alternative to Chrome, the standard build still includes significant telemetry out of the box. Firefox ships with:
+- Mozilla Telemetry (Data harvesting)
+- Pocket Integration (Content suggestions)
+- Sponsored Shortcuts on the New Tab page
+
+**LibreWolf** is an independent, community-driven hard fork of Firefox that completely strips these elements. We replaced Firefox with LibreWolf because it provides:
+1. **Zero Telemetry:** All Mozilla data-collection features are surgically removed.
+2. **Built-in Protection:** uBlock Origin is pre-installed and enabled.
+3. **Hardened Security:** Advanced privacy tweaks are enforced by default.
+4. **Minimal Breakage:** Despite the strict privacy settings, LibreWolf maintains excellent compatibility with modern web applications.
+
+## Why Zen Browser is Included
+
+JarvisOS is built with a **privacy-first, developer-focused** philosophy. We recognize that many developers want the power of a Firefox engine without the telemetry overhead.
+
+**Zen Browser** is a modern, privacy-first Firefox fork built for speed and customization. It strips Mozilla's data collection while adding a clean, workspace-style UI that developers find productive. For users who want a fast, private browser that stays out of their way, Zen is the natural choice alongside LibreWolf.
+
+## Alternative Chromium Options
+
+For users who require Chromium engine compatibility for specific developer tools or web standards, JarvisOS offers two highly curated options:
+
+### 1. Brave (Configured)
+The playbook can optionally install Brave, but it applies custom configurations to disable Brave's native cryptocurrency features, rewards systems, and sponsored ads, leaving you with a fast, private Chromium base.
+
+### 2. Ungoogled Chromium (UGC)
+For absolute purists, Ungoogled Chromium is the ultimate choice. It is Google Chrome with absolutely every Google web service dependency, tracking mechanism, and API stripped out at the source code level.
+
+> [!CAUTION]
+> If you choose Ungoogled Chromium, you will need to manually install extensions via `.crx` files or alternative web stores, as the official Chrome Web Store API is intentionally broken to prevent tracking.

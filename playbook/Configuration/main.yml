@@ -1,0 +1,21 @@
+---
+title: JarvisOS Playbook
+description: Main execution script for JarvisOS (Triple Helix)
+actions:
+  - !status: {status: 'Starting JarvisOS 02.06.26 Triple Helix setup...'}
+
+  - !status: {status: 'Phase 1: True Blind Merge of ReviOS Base...'}
+  - !task: {path: 'revi_main.yml'}
+
+  - !status: {status: 'Phase 2: True Blind Merge of AtlasOS Performance...'}
+  - !task: {path: 'atlas_custom.yml'}
+
+  - !status: {status: 'Phase 3: JarvisOS Deep Hardening & Custom Software...'}
+  - !task: {path: 'jarvis_tasks/11_software.yml'}
+  - !task: {path: 'jarvis_tasks/15_bitdefender.yml'}
+  - !task: {path: 'jarvis_tasks/16_privacy_plus_deep.yml'}
+  - !task: {path: 'jarvis_tasks/17_enhanced_security.yml'}
+  - !task: {path: 'jarvis_tasks/18_profile.yml'}
+  - !task: {path: 'jarvis_tasks/19_aggressive_cleanup.yml'}
+
+  - !status: {status: 'JarvisOS setup complete. Restart recommended.'}

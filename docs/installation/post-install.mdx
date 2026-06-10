@@ -1,0 +1,113 @@
+---
+title: 'Post-Installation'
+description: 'What to do immediately after deploying JarvisOS.'
+---
+
+# Post-Installation Checklist
+
+The AME Wizard has finished. Your system is now clean, private, and developer-ready. A few steps remain to bring it to full operational state.
+
+---
+
+## 1. Install Hardware Drivers
+
+Windows Update is suppressed by default. Install your primary drivers directly from manufacturers — not from Windows Update, which bundles telemetry-laden OEM suites.
+
+| Hardware | Where to Get Drivers |
+|----------|---------------------|
+| **NVIDIA GPU** | [nvidia.com](https://nvidia.com) — use NVCleanstall to strip telemetry from the installer |
+| **AMD GPU** | [amd.com](https://amd.com) — use Radeon Software Slimmer for a clean install |
+| **Intel GPU** | [intel.com/support](https://intel.com/support) |
+| **Chipset (AMD/Intel)** | Direct from AMD or Intel support pages |
+| **Network / Audio** | Bare INF drivers preferred — avoid OEM control panel suites |
+
+<Tip>
+Before starting the JarvisOS installation, save your essential networking drivers to a USB drive. You will need them if your NIC is not natively recognized.
+</Tip>
+
+---
+
+## 2. Manage Windows Updates
+
+JarvisOS suppresses automatic Windows Updates to prevent Microsoft from reinstalling removed components or forcing unwanted driver updates.
+
+Use the **AtlasOS Toolbox** (installed in `C:\Program Files\JarvisOS Tools` and on your Desktop):
+
+1. Open **AtlasOS Toolbox** from the desktop shortcut
+2. Navigate to **Windows Update**
+3. Toggle updates **ON**
+4. Install security patches
+5. Toggle updates **OFF** when done
+
+<Warning>
+Leaving Windows Update permanently enabled will eventually cause the OS to attempt repair of mitigated components. Patch, then disable.
+</Warning>
+
+---
+
+## 3. Set Up Your Browser
+
+Your selected browser is installed. First-launch setup:
+
+<Tabs>
+  <Tab title="Brave">
+    Enable **Brave Shields** on all sites. Go to `brave://settings/shields` and set default to Aggressive. Import bookmarks from your old browser if needed.
+  </Tab>
+  <Tab title="LibreWolf">
+    LibreWolf ships with uBlock Origin pre-installed. Go to `about:preferences#privacy` and verify Enhanced Tracking Protection is set to Strict.
+  </Tab>
+
+  <Tab title="Zen Browser">
+    Firefox-based, privacy-first. Go to `about:preferences#privacy` and review the tracking protection settings. uBlock Origin can be installed from addons.mozilla.org.
+  </Tab>
+</Tabs>
+
+---
+
+## 4. Explore Your Maintenance Tools
+
+JarvisOS installs four maintenance tools by default:
+
+<CardGroup cols={2}>
+  <Card title="Privacy+ Settings" icon="shield">
+    CLI tool for toggling OS-level privacy settings. Run `ame-settings-cli --help` from an elevated terminal to see all available toggles.
+  </Card>
+  <Card title="App Fetch" icon="download">
+    Sideload UWP apps without the Microsoft Store. Run `app-fetch install <PackageID>` to install any app from its source.
+  </Card>
+  <Card title="AtlasOS Toolbox" icon="sliders">
+    80+ system toggles in a GUI. Manage power plans, update settings, network tweaks, and more. Desktop shortcut created automatically.
+  </Card>
+  <Card title="Revision Tool" icon="rotate">
+    ReviOS-compatible system maintenance utility. Use it for cleanup tasks and configuration resets when needed.
+  </Card>
+</CardGroup>
+
+---
+
+## 5. Verify Developer Tools
+
+If you selected Git, VS Code, and Node.js during installation, verify them:
+
+```powershell
+git --version
+code --version
+node --version
+npm --version
+```
+
+WSL2 should be active. Verify:
+
+```powershell
+wsl --list --verbose
+```
+
+If WSL2 isn't showing a distro, install one:
+
+```powershell
+wsl --install -d Ubuntu
+```
+
+---
+
+Your system is ready. Intelligence. Speed. Control.
