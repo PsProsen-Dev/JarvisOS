@@ -5,63 +5,100 @@ description: 'How JarvisOS stacks up against AtlasOS, ReviOS, Privacy+, and AME 
 
 # Playbook Comparison
 
-Not all custom Windows environments are built the same. Gaming builds sacrifice privacy for frame rates. Privacy builds break developer tooling. JarvisOS is engineered for a specific audience — developers — and makes no compromises in either direction.
+Not all custom Windows environments are built the same. Gaming builds sacrifice privacy for frame rates. Privacy builds break developer tooling. JarvisOS is engineered for a specific audience — **developers** — and makes no compromises in either direction.
 
 ---
 
-## Feature Matrix
+## ⚡ The Feature Matrix
 
-| Feature | JarvisOS⚡ | AtlasOS | ReviOS | AME 11 |
-|---------|:----------:|:-------:|:------:|:------:|
-| **Telemetry removal depth** | Registry + Service + Appx | Policy-level | Policy-level | Total eradication |
-| **WSL2 / Hyper-V** | ✅ Preserved | ✅ Preserved | ✅ Preserved | ⚠️ Manual |
-| **Windows Sandbox** | ✅ Preserved | ❌ Removed | ⚠️ Optional | ❌ Removed |
-| **Docker compatibility** | ✅ Yes | ✅ Yes | ✅ Yes | ⚠️ Manual |
-| **Windows Update** | Manual (AtlasOS Toolbox) | Managed | Enabled (tweaked) | Permanently broken |
-| **Microsoft Store** | ❌ Removed | ✅ Optional | ✅ Available | ❌ Removed |
-| **Xbox / Game Bar** | ❌ Completely removed | ✅ Fully supported | ✅ Supported | ❌ Removed |
-| **Post-install toolbox** | ✅ Privacy+ Settings + AtlasOS Toolbox | ✅ AtlasOS Toolbox | ✅ Revision Tool | ❌ None |
-| **Browser choice (at install)** | Brave / LibreWolf / Zen Browser | Manual | Manual | Manual |
-| **Office suite (at install)** | OnlyOffice / LibreOffice / FreeOffice | Manual | Manual | Manual |
-| **Target audience** | Full-stack developers | Gamers | General power users | Extreme privacy advocates |
+<Tabs>
+  <Tab title="JarvisOS (Dev)">
+    <Card title="The Developer Workstation" icon="code" iconType="duotone" color="#FF6B00">
+      * **Telemetry:** Total eradication (Registry + Service + Appx)
+      * **Virtualization:** WSL2, Hyper-V, and Sandbox fully preserved
+      * **Bloatware:** Microsoft Store, Xbox, and Game Bar completely removed
+      * **Updates:** Manual via AtlasOS Toolbox
+      * **Post-Install:** Privacy+ Settings + AtlasOS Toolbox integrated
+      * **Interactive Install:** Choose Browsers, Office Suites, and Dev Tools
+    </Card>
+  </Tab>
+  <Tab title="AtlasOS (Gaming)">
+    <Card title="The Competitive Gamer" icon="gamepad" iconType="duotone" color="#3b82f6">
+      * **Telemetry:** Policy-level reduction
+      * **Virtualization:** Preserved, but Sandbox is removed
+      * **Bloatware:** Xbox & Game Bar fully supported
+      * **Updates:** Managed automatically
+      * **Post-Install:** AtlasOS Toolbox
+      * **Interactive Install:** Manual selection post-install
+    </Card>
+  </Tab>
+  <Tab title="ReviOS (General)">
+    <Card title="The Stable Daily Driver" icon="desktop" iconType="duotone" color="#8b5cf6">
+      * **Telemetry:** Policy-level reduction
+      * **Virtualization:** Preserved
+      * **Bloatware:** Microsoft Store and Xbox supported
+      * **Updates:** Enabled but tweaked
+      * **Post-Install:** Revision Tool
+      * **Interactive Install:** Manual selection post-install
+    </Card>
+  </Tab>
+  <Tab title="AME 11 (Privacy)">
+    <Card title="The Privacy Extremist" icon="user-secret" iconType="duotone" color="#ef4444">
+      * **Telemetry:** Total eradication
+      * **Virtualization:** Requires manual patches
+      * **Bloatware:** Microsoft Store and Xbox completely removed
+      * **Updates:** Permanently broken
+      * **Post-Install:** None natively integrated
+      * **Interactive Install:** CLI based or manual
+    </Card>
+  </Tab>
+</Tabs>
 
 ---
 
-## Why Not AtlasOS?
+## 🔍 Deep Dive Comparisons
 
-AtlasOS is excellent — for gaming. It prioritizes frame rates and keeps Xbox and Game Pass intact. That means telemetry services tied to the gaming ecosystem stay alive.
+Why choose JarvisOS over the established alternatives?
 
-JarvisOS removes everything Xbox-related — Xbox Identity Provider, Game Save sync, Game Bar, Xbox Networking — because developers don't need them, and they consume background resources.
+<AccordionGroup>
+  <Accordion title="Why Not AtlasOS?" icon="gamepad" iconType="duotone">
+    AtlasOS is excellent — for gaming. It prioritizes frame rates and keeps Xbox and Game Pass intact. That means telemetry services tied to the gaming ecosystem stay alive.
 
-If you are a competitive gamer who needs Vanguard or Xbox Live: **use AtlasOS instead**. JarvisOS is the wrong tool for that.
+    JarvisOS removes everything Xbox-related — Xbox Identity Provider, Game Save sync, Game Bar, Xbox Networking — because developers don't need them, and they consume background resources.
+
+    > **Verdict:** If you are a competitive gamer who needs Vanguard or Xbox Live, use AtlasOS instead. JarvisOS is the wrong tool for that.
+  </Accordion>
+
+  <Accordion title="Why Not ReviOS?" icon="desktop" iconType="duotone">
+    ReviOS is a stable, well-maintained daily driver — but it keeps Windows Update enabled (tweaked) and takes a conservative approach to service removal. It is not built around a developer's specific needs.
+
+    JarvisOS borrows ReviOS's stability mindset and includes the **Revision Tool** as a post-install maintenance option, but goes significantly deeper on privacy and preserves more developer-specific features.
+  </Accordion>
+
+  <Accordion title="Why Not Pure AME 11?" icon="user-secret" iconType="duotone">
+    AME 11 is the most aggressive privacy environment available — but it permanently breaks Windows Update, meaning you cannot get critical driver patches or security fixes without significant manual work.
+
+    JarvisOS uses the AME playbook system but integrates the **AtlasOS Toolbox** to manage selective update sessions — you get security patches when you need them, and absolute lock down when you don't.
+  </Accordion>
+</AccordionGroup>
 
 ---
 
-## Why Not ReviOS?
+## 🧬 Architectural DNA
 
-ReviOS is a stable, well-maintained daily driver — but it keeps Windows Update enabled (tweaked) and takes a conservative approach to service removal. It is not built around a developer's specific needs.
+JarvisOS is an original AME playbook that studied, analyzed, and selectively adopted patterns from the legends of the modding community — with a developer-first lens applied to every decision.
 
-JarvisOS borrows ReviOS's stability mindset and includes the **Revision Tool** as a post-install maintenance option, but goes deeper on privacy and preserves more developer-specific features.
-
----
-
-## Why Not Pure AME 11?
-
-AME 11 is the most aggressive privacy environment available — but it permanently breaks Windows Update, meaning you cannot get critical driver patches or security fixes without significant manual work.
-
-JarvisOS uses the AME playbook system but integrates the **AtlasOS Toolbox** to manage selective update sessions — security patches when you need them, locked down when you don't.
-
----
-
-## Where JarvisOS Draws From
-
-| Source | What We Took |
-|--------|-------------|
-| **Privacy+** | Privacy hardening foundation, `ame-settings-cli` tool |
-| **ReviOS** | Service decision philosophy, Revision Tool integration |
-| **AtlasOS** | Dev-safe performance tweaks, AtlasOS Toolbox, update management approach |
-| **AME Beta** | The playbook engine and action system that makes all of this possible |
-
-<Info>
-JarvisOS is not a fork of any of these projects. It is an original AME playbook that studied, analyzed, and selectively adopted patterns from each — with a developer-first lens applied to every decision.
-</Info>
+<CardGroup cols={2}>
+  <Card title="Privacy+" icon="shield-halved" iconType="duotone" color="#a855f7">
+    We integrated the Privacy hardening foundation and the `ame-settings-cli` tool.
+  </Card>
+  <Card title="ReviOS" icon="layer-group" iconType="duotone" color="#3b82f6">
+    We adopted their service decision philosophy and integrated the Revision Tool.
+  </Card>
+  <Card title="AtlasOS" icon="gauge-high" iconType="duotone" color="#22c55e">
+    We utilized dev-safe performance tweaks, the AtlasOS Toolbox, and their update management approach.
+  </Card>
+  <Card title="AME Labs" icon="flask" iconType="duotone" color="#f59e0b">
+    Powered by the cutting-edge AME playbook engine and action system.
+  </Card>
+</CardGroup>

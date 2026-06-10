@@ -15,14 +15,18 @@ JarvisOS is deployed via **AME Wizard** — the official tool from Ameliorated L
 **Always test in a VM first.** JarvisOS v30.05.26 has passed VM validation — but verify on your specific hardware before applying to a daily-driver machine.
 </Warning>
 
-| Requirement | Detail |
-|-------------|--------|
-| **OS** | Fresh Windows 11 install — builds 22000, 22621, 22631, 26100, 26200, 27686 |
-| **Updates** | All Windows Updates installed and rebooted |
-| **Antivirus** | Disabled or removed before running |
-| **Defender** | Tamper Protection OFF (via Windows Security settings) |
-| **Power** | Plugged in if on a laptop |
-| **Backup** | Your data backed up — this is a system-level operation |
+<Tabs>
+  <Tab title="System Requirements">
+    | Requirement | Detail |
+    |-------------|--------|
+    | **OS** | Fresh Windows 11 install — builds `22000`, `22621`, `22631`, `26100`, `26200`, `27686` |
+    | **Updates** | All Windows Updates installed and rebooted |
+    | **Antivirus** | Disabled or removed before running |
+    | **Defender** | Tamper Protection OFF (via Windows Security settings) |
+    | **Power** | Plugged in if on a laptop |
+    | **Backup** | Your data backed up — this is a system-level operation |
+  </Tab>
+</Tabs>
 
 <Note>
 Do not run any third-party debloat tools (O&O ShutUp10, Winaero Tweaker, etc.) before or after JarvisOS. They will conflict with AME's deep-system configuration and are not supported.
@@ -32,62 +36,60 @@ Do not run any third-party debloat tools (O&O ShutUp10, Winaero Tweaker, etc.) b
 
 ## Windows 11 25H2 Local Account Bypass
 
-On fresh 25H2 ISOs, the standard local account OOBE bypass may not work. During the network or sign-in screen:
+On fresh 25H2 ISOs, the standard local account OOBE bypass may not work. During the network or sign-in screen, use this shortcut to force the offline local account creation wizard directly:
 
+<CodeGroup>
+```powershell Local Account Bypass
+# 1. Press Shift + F10 to open CMD
+# 2. Type the following command and press Enter:
+start ms-cxh:localonly
 ```
-Press  Shift + F10  →  type:  start ms-cxh:localonly
-```
-
-This forces the offline local account creation wizard directly.
+</CodeGroup>
 
 ---
 
 ## Step-by-Step Installation
 
-### Step 1 — Download
+<Steps>
+  <Step title="Download the Assets">
+    You will need both the AME Wizard and the JarvisOS Playbook file.
+    
+    * **JarvisOS Playbook** → Download the `.apbx` from [GitHub Releases](https://github.com/PsProsen-Dev/JarvisOS/releases/latest)
+    * **AME Wizard** → Download the beta from [amelabs.net](https://amelabs.net)
+  </Step>
+  <Step title="Prepare the Environment">
+    Before running the wizard, you must turn off Windows Defender **Real-Time Protection** and **Tamper Protection**. AME Wizard requires unhindered access to modify deep system components.
+  </Step>
+  <Step title="Run AME Wizard">
+    Launch the AME Wizard executable as an **Administrator**. Drag and drop the `JarvisOS_30.05.26.apbx` file directly into the Wizard window. Work through the pre-flight checklist and resolve any flagged issues. Click **Run Playbook**.
+  </Step>
+  <Step title="Select Your Stack">
+    JarvisOS presents a full-screen interactive selection UI. Choose your preferred applications:
 
-Get both files:
-- **JarvisOS Playbook** → [GitHub Releases](https://github.com/PsProsen-Dev/JarvisOS/releases/latest) (`JarvisOS_30.05.26.apbx`)
-- **AME Wizard** → [amelabs.net](https://amelabs.net)
-
-### Step 2 — Prepare
-
-Turn off Windows Defender Real-Time Protection and Tamper Protection. AME Wizard requires unhindered access to modify system components.
-
-### Step 3 — Run AME Wizard
-
-1. Launch AME Wizard as Administrator
-2. Drag `JarvisOS_30.05.26.apbx` into the Wizard window
-3. Work through the pre-flight checklist — resolve any flagged issues
-4. Click **Run Playbook**
-
-### Step 4 — Select Your Stack
-
-JarvisOS presents a full-screen selection UI. Pick what goes on your machine:
-
-<CardGroup cols={2}>
-  <Card title="Browser" icon="globe">
-    Brave, LibreWolf, or Zen Browser. One selection required.
-  </Card>
-  <Card title="Office Suite" icon="file-word">
-    OnlyOffice (recommended), LibreOffice, or FreeOffice. One selection required.
-  </Card>
-  <Card title="Dev Tools" icon="code">
-    Git, VS Code, Node.js LTS — all optional, all checked by default.
-  </Card>
-  <Card title="Maintenance Tools" icon="wrench">
-    Privacy+ Settings, App Fetch, AtlasOS Toolbox, Revision Tool — all default-checked.
-  </Card>
-</CardGroup>
-
-### Step 5 — Wait
-
-The system will restart multiple times during the mitigation phase. **Do not interrupt.** A forced shutdown mid-process will require a clean reinstall.
-
-When AME Wizard shows the success screen, you are done. Proceed to [Post-Installation](/docs/installation/post-install).
+    <CardGroup cols={2}>
+      <Card title="Browser" icon="globe" iconType="duotone" color="#FF6B00">
+        Brave, LibreWolf, or Zen Browser. One selection required.
+      </Card>
+      <Card title="Office Suite" icon="file-word" iconType="duotone" color="#FFB800">
+        OnlyOffice (recommended), LibreOffice, or FreeOffice. One selection required.
+      </Card>
+      <Card title="Dev Tools" icon="code" iconType="duotone" color="#FF6B00">
+        Git, VS Code, Node.js LTS — all optional, all checked by default.
+      </Card>
+      <Card title="Maintenance Tools" icon="wrench" iconType="duotone" color="#FFB800">
+        Privacy+ Settings, App Fetch, AtlasOS Toolbox, Revision Tool — all default-checked.
+      </Card>
+    </CardGroup>
+  </Step>
+  <Step title="Wait for Completion">
+    The system will restart multiple times during the mitigation phase. **Do not interrupt.** A forced shutdown mid-process will require a clean reinstall. When AME Wizard shows the success screen, you are done!
+  </Step>
+</Steps>
 
 ---
 
 <Warning>
 If the Wizard shows a popup modal instead of a full-screen selection UI, you may have an older version of the playbook. Download the latest release from GitHub.
 </Warning>
+
+Proceed to [Post-Installation](/docs/installation/post-install).
