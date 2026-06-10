@@ -2,8 +2,8 @@
     "$schema": "https://mintlify.com/schema.json",
     "name": "JarvisOS",
     "logo": {
-        "dark": "/logo/jarvis_logo.png",
-        "light": "/logo/jarvis_logo.png"
+        "dark": "/logo/playbook.png",
+        "light": "/logo/playbook.png"
     },
     "favicon": "/logo/jarvis_logo.png",
     "colors": {
