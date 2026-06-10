@@ -7,12 +7,12 @@
     },
     "favicon": "/logo/jarvis_logo.png",
     "colors": {
-        "primary": "#39FF14",
-        "light": "#8FFF75",
-        "dark": "#1A8A00",
+        "primary": "#FF6B00",
+        "light": "#FFB800",
+        "dark": "#CC5500",
         "anchors": {
-            "from": "#39FF14",
-            "to": "#00F3FF"
+            "from": "#FF6B00",
+            "to": "#FFB800"
         }
     },
     "topbarLinks": [
