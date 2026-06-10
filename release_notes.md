@@ -1,4 +1,6 @@
-🚀 **JarvisOS 02.06.26 - Triple Helix (Atlas/Revi Blind Merge + Privacy+ Cherry-Pick)**
+🚀 **JarvisOS 11.06.26 - Triple Helix (Atlas/Revi Blind Merge + Privacy+ Cherry-Pick)**
+
+*ℹ️ Versioning Philosophy: JarvisOS versions are based on the release date in the `DD.MM.YY` format. This release corresponds to June 11, 2026.*
 
 ### What's New:
 * **The True Triple Helix Merge**: Executed a 100% blind merge of the ENTIRE ReviOS 26.04 playbook AND the ENTIRE AtlasOS v0.5.0 playbook. No cherry-picking. 
