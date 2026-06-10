@@ -49,3 +49,26 @@
   opacity: 1 !important;
   filter: drop-shadow(0 0 2px rgba(229, 231, 235, 0.35));
 }
+
+/* =========================================
+   Hide "Powered by Mintlify" Watermark 
+   ========================================= */
+
+/* Target the watermark link specifically by its href properties or its placement outside the main prose */
+a[href*="mintlify.com/"][target="_blank"]:not(.prose a),
+a[href*="utm_campaign=poweredBy"],
+a[href^="https://mintlify.com"]:not(.prose a) {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  position: absolute !important;
+}
+
+/* Fallback: Hide any text that looks like the watermark in the navigation footer */
+a > span:contains("Powered by"),
+div > a[href="https://mintlify.com"] {
+  display: none !important;
+}
